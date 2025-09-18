@@ -1,0 +1,21 @@
+$body-font-family: iranyekan, Tahoma, serif !important;
+$alert-border-width: 2px;
+@use 'sass:map'; // Import the map module
+
+// Define the $font-weight map directly
+$font-weight: (
+  'light': 100,
+  'extra-light': 200,
+  'regular': 300,
+  'normal': 400,
+  'medium': 500,
+  'semi-bold': 600,
+  'bold': 700,
+  'extra-bold': 800,
+  'black': 900,
+);
+
+// Function to get the font weight from the map
+@function weight($weight-name) {
+  @return map.get($font-weight, $weight-name); // Use map.get() to retrieve values
+}
