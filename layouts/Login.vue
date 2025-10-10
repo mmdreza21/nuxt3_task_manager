@@ -9,13 +9,9 @@ export default {
 <template>
   <v-app>
     <div class="bg-login">
-      <v-locale-provider rtl>
-        <SharedSnakeBarNotife />
-
-        <v-container fluid class="px-0 py-n1">
-          <slot />
-        </v-container>
-      </v-locale-provider>
+      <layout-header />
+      <SharedSnakeBarNotife />
+      <slot />
     </div>
   </v-app>
 </template>

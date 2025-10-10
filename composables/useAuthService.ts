@@ -1,6 +1,21 @@
-import type { SuccessLogin, UserLoginData, UserType } from "~/types/UserTypes";
+import type {
+  SendOtpDTO,
+  signUpResponse,
+  SuccessLogin,
+  UserLoginDTO,
+  UserOtpLoginDTO,
+  UserType,
+  userUpdateDto,
+} from "~/types/UserTypes";
+import { useNotification } from "./useNotification";
+import { useAuthUser } from "~/stores/user";
+import type {
+  ILoginProcess,
+  LoginCredentials,
+  LoginStates,
+} from "~/types/LoginTypes";
 
-// "Golden Order" - ensuring secure cookies for the Elden Ring journey
+// "Expecto Patronum!" - Protecting our authentication system with secure cookies
 export const useAuthService = () => {
   const backUrlCookie: Ref<string> = useCookie("backUrlCookie", {
     sameSite: "lax",
@@ -8,11 +23,14 @@ export const useAuthService = () => {
     maxAge: 31536000,
   });
 
+  // "The Dark Mark" - Storing the CSRF token, but beware of security threats!
   const csrfToken: Ref<string> = useCookie("csrf_token", {
     sameSite: "lax",
     secure: false,
     maxAge: 31536000,
   });
+
+  // "The Marauder's Map" - Holding the user's Authorization Token
   const AuthorizationCookies: Ref<string | null> = useCookie("Authorization", {
     sameSite: "lax",
     secure: false,
@@ -20,147 +38,190 @@ export const useAuthService = () => {
   });
 
   const config = useRuntimeConfig();
-
+  const { $customFetch } = useNuxtApp();
   const baseAuthUrl = config.public.BASEURL;
-  // const baseAuthUrl = "https://api.cycfx.com";
-
-  // const { fireNotification } = useNotification();
+  const { fireNotification } = useNotification();
 
   class AuthService {
-    // "Tarnished seeking the Elden Ring" - prepare for checking user authentication
+    // "Hogwarts Sorting Ceremony" - Determining if the user is logged in
     async getUser(): Promise<{ loggedIn: boolean; error: any }> {
-      const AuthorizationCookies: Ref<string | null> =
-        useCookie("Authorization");
       const userStore = useAuthUser();
+
       const res: { loggedIn: boolean; error: any } = {
         loggedIn: false,
         error: {},
       };
+
       try {
-        // "Grace bestowed upon the Tarnished" - gathering user data from the backend
-        const data = await useNuxtApp().$customFetch<UserType>(
-          "/auth/login",
-          {}
-        );
-        userStore.addUser(data.data);
+        // "Accio User Data!" - Fetching the user details from the backend
+        const data = await $customFetch<UserType>("/auth/me", {
+          method: "GET",
+        });
+
+        userStore.addUser(data);
         res.loggedIn = true;
+
         return res;
       } catch (error: any) {
-        // "Fell by the hand of a demigod" - handling error in user fetch
-        // AuthorizationCookies.value = null;
+        // "Avada Kedavra!" - Authentication failed, removing user session
         res.error = error;
         res.loggedIn = false;
         return res;
       }
     }
 
-    async loginWithPass(credentials: UserLoginData): Promise<any> {
-      const data = await useNuxtApp().$customFetch<
-        SuccessLogin | null | undefined
-      >("/auth", { method: "POST", body: credentials });
-
-      console.log(data);
-
-      AuthorizationCookies.value = "Bearer " + data.accessToken;
-
-      location.assign(backUrlCookie.value || "/");
-
-      return { data };
+    // "Alohomora!" - Unlocking the doors to the magical world of authentication
+    async loginWithPass(
+      credentials: UserLoginDTO
+    ): Promise<SuccessLogin | null | undefined> {
+      try {
+        return await $customFetch<SuccessLogin | null | undefined>(
+          "/auth/login",
+          {
+            method: "POST",
+            body: credentials,
+          }
+        );
+      } catch (error) {
+        fireNotification("red", "ایمیل یا رمز عبور اشتباه است");
+      }
     }
 
-    // async loginWithOAuth(
-    //   credentials: OAthReq
-    // ): Promise<{ data: SuccessLogin | null | undefined; error: any }> {
-    //   const { data, error } = await useAPIFetch<
-    //     SuccessLogin | null | undefined
-    //   >("/auth/login", { method: "POST", body: credentials });
+    // "Owl Post Delivery" - Sending an OTP to the user
+    async sendOtp(
+      credentials: SendOtpDTO
+    ): Promise<SuccessLogin | null | undefined> {
+      return await $customFetch<SuccessLogin | null | undefined>("/auth/otp", {
+        method: "POST",
+        body: credentials,
+      });
+    }
 
-    //   const res: { data: SuccessLogin | null | undefined; error: any } = {
-    //     data: data.value,
-    //     error,
-    //   };
+    // "The Goblet of Fire" - Authenticating the user with an OTP
+    async loginWithOtp(
+      credentials: UserOtpLoginDTO
+    ): Promise<SuccessLogin | null | undefined> {
+      return await $customFetch<SuccessLogin | null | undefined>(
+        "/verify-otp",
+        {
+          method: "POST",
+          body: credentials,
+        }
+      );
+    }
 
-    //   return res;
-    // }
+    // "The Philosopher’s Stone" - Creating a new account and entering the wizard world
+    async signUp(
+      credentials: UserLoginDTO
+    ): Promise<signUpResponse | null | undefined> {
+      try {
+        const res = await $customFetch<signUpResponse | null | undefined>(
+          "/users",
+          { method: "POST", body: credentials }
+        );
 
-    // async sendOtp(
-    //   credentials: SendOtp
-    // ): Promise<{ data: SuccessLogin | null | undefined; error: any }> {
-    //   const { data, error } = await useAPIFetch<
-    //     SuccessLogin | null | undefined
-    //   >("/auth/otp", { method: "POST", body: credentials });
+        return res;
+      } catch (error: any) {
+        fireNotification("red", error.response._data.message);
+        console.error(error);
+      }
+    }
 
-    //   const res: { data: SuccessLogin | null | undefined; error: any } = {
-    //     data: data.value,
-    //     error,
-    //   };
+    async forgetPassword(
+      credentials: SendOtpDTO
+    ): Promise<SuccessLogin | null | undefined> {
+      return await $customFetch<SuccessLogin | null | undefined>(
+        "/forgot-password",
+        {
+          method: "POST",
+          body: credentials,
+        }
+      );
+    }
+    // "The Time-Turner" - Resetting the user's password
+    async resetPassword(
+      credentials: UserOtpLoginDTO
+    ): Promise<SuccessLogin | null | undefined> {
+      return await $customFetch<SuccessLogin | null | undefined>(
+        "/reset-password",
+        {
+          method: "POST",
+          body: credentials,
+        }
+      );
+    }
 
-    //   return res;
-    // }
+    // "Portkey Activation" - Handling the login journey with cookies and redirects
+    loginProcess(method: Function): ILoginProcess {
+      const authCookie: Ref<string> = useCookie("Authorization", {
+        maxAge: 31536000,
+      });
 
-    // async loginWithOtp(
-    //   credentials: UserOtpLoginData
-    // ): Promise<{ data: SuccessLogin | null | undefined; error: any }> {
-    //   const { data, error } = await useAPIFetch<
-    //     SuccessLogin | null | undefined
-    //   >("/auth/login", { method: "POST", body: credentials });
+      const states = useState<LoginStates>("states");
+      const state: Ref<string> = useState("state");
+      const router = useRouter();
+      const route = useRoute();
+      const loading = ref(false);
+      const emailState = useState<string>("email");
 
-    //   const res: { data: SuccessLogin | null | undefined; error: any } = {
-    //     data: data.value,
-    //     error,
-    //   };
+      // "Floo Network Connection" - Handling the login process
+      async function login(credentials: LoginCredentials): Promise<void> {
+        loading.value = true;
+        try {
+          const data = await method(credentials);
+          console.log(data);
 
-    //   return res;
-    // }
+          authCookie.value = `bearer ${data?.accessToken}`;
+          // console.log(authCookie.value);
 
-    //   loginProcess(method: Function): ILoginProcess {
-    //     const authCookie: Ref<string> = useCookie("Authorization", {
-    //       sameSite: "strict",
-    //       secure: true,
-    //       maxAge: 31536000,
-    //     });
+          await new Promise((resolve) => setTimeout(resolve, 1000));
+          const userData = await useAuthService().getUser();
 
-    //     const states = useState<LoginStates>("states");
-    //     const state: Ref<string> = useState("state");
-    //     const router = useRouter();
-    //     const route = useRoute();
+          if (userData.loggedIn) {
+            router.push((route.query.redirect as string) ?? "/");
+          } else if (data.error.value) {
+            fireNotification("red", "Dark magic detected! Invalid token.");
+          }
+        } catch (error: any) {
+          console.log(error.response._data.message);
+          fireNotification("red", error.response._data.message);
+        } finally {
+          loading.value = false;
+        }
+      }
 
-    //     const loading = ref(false);
+      return {
+        authCookie,
+        states,
+        state,
+        loading,
+        emailState,
+        fireNotification,
+        login,
+      };
+    }
 
-    //     const emailState = useState<string>("email");
+    async updateUserInfo(data: userUpdateDto) {
+      const res = await $customFetch<{ message: string; user: UserType }>(
+        "/profile",
+        {
+          method: "PUT",
+          body: { ...data },
+        }
+      );
+      const userStore = useAuthUser();
+      userStore.addUser(res.user);
+      return res;
+    }
 
-    //     async function login(credentials: LoginCredentials): Promise<void> {
-    //       loading.value = true;
-    //       try {
-    //         const data = await method(credentials);
-    //         if (data.error.value) {
-    //           fireNotification("red", "اطلاعات وارد شده اشتباه است!");
-    //         } else {
-    //           authCookie.value = `${data.data?.token_type}  ${data.data?.access_token}`;
-    //           await new Promise((resolve) => setTimeout(resolve, 1000));
-    //           const userData = await useAuthService().getUser();
-    //           if (userData.loggedIn) {
-    //             router.push((route.query.redirectUrl as string) ?? "/");
-    //           } else if (data.error.value) {
-    //             fireNotification("red", "اطلاعات توکن اشتباه است");
-    //           }
-    //         }
-    //       } catch (error: any) {
-    //        console.error(error);
-    //       } finally {
-    //         loading.value = false;
-    //       }
-    //     }
-    //     return {
-    //       authCookie,
-    //       states,
-    //       state,
-    //       loading,
-    //       emailState,
-    //       fireNotification,
-    //       login,
-    //     };
-    //   }
+    async verifyPhone(phone: string) {
+      const res = await $customFetch("/verifyPhone", {
+        method: "POST",
+        body: { phone },
+      });
+      return res;
+    }
   }
+
   return new AuthService();
 };

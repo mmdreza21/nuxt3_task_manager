@@ -20,7 +20,7 @@ const model = defineModel<boolean>();
           max-height="35px"
           @click="model = false"
         >
-          <CommonIconsax icon="close-circle"></CommonIconsax>
+          <v-icon icon="close-circle"></v-icon>
         </v-btn>
       </div>
       <v-divider class="my-1"></v-divider>

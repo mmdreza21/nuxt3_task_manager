@@ -3,7 +3,6 @@ import type { CreateTaskDto, Task } from "~/types/TaskTypes";
 definePageMeta({
   title: "صفحه اصلی",
   description: "صفحه اصلی",
-  middleware: ["auth"],
 });
 const tasks = ref<Task[]>([]);
 const loading = ref(false);
@@ -62,7 +61,7 @@ onMounted(loadTasks);
 </script>
 
 <template>
-  <v-container class="py-4">
+  <v-container class="py-4 mt-16 pt-16">
     <v-row>
       <v-col cols="12" md="8" offset-md="2">
         <TaskFilters

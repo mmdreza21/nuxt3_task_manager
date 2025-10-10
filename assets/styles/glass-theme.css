@@ -1,0 +1,110 @@
+/* 🌌 Frosted Glass Base Card */
+.glass-card {
+  backdrop-filter: blur(25px) !important;
+  -webkit-backdrop-filter: blur(25px) !important;
+  background: rgba(255, 255, 255, 0.08) !important;
+  border: 1px solid rgba(255, 255, 255, 0.15) !important;
+  box-shadow: 0 8px 40px rgba(59, 130, 246, 0.25) !important;
+  border-radius: 16px !important;
+  transition: all 0.4s ease !important;
+}
+
+.glass-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 45px rgba(59, 130, 246, 0.45);
+}
+
+/* 🧊 Glass Inputs */
+.glass-input .v-field__overlay {
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+.glass-input .v-field-label {
+  color: rgba(255, 255, 255, 0.65) !important;
+}
+
+.glass-input .v-field__input {
+  color: #fff !important;
+}
+
+.glass-input .v-icon {
+  color: rgba(255, 255, 255, 0.75) !important;
+}
+
+.glass-input .v-field__outline {
+  border-color: rgba(255, 255, 255, 0.25) !important;
+}
+
+.glass-input.v-field--focused .v-field__outline {
+  border-color: #60a5fa !important;
+  box-shadow: 0 0 8px rgba(96, 165, 250, 0.6);
+}
+
+/* 💎 Primary Glass Button */
+.glass-btn {
+  backdrop-filter: blur(8px);
+  background: linear-gradient(135deg, #3b82f6, #60a5fa) !important;
+  box-shadow: 0 0 25px rgba(59, 130, 246, 0.5);
+  color: #fff;
+  font-weight: 600;
+  text-transform: none;
+  transition: all 0.3s ease;
+  border-radius: 8px;
+}
+
+.glass-btn:hover {
+  background: linear-gradient(135deg, #60a5fa, #3b82f6);
+  box-shadow: 0 0 35px rgba(96, 165, 250, 0.8);
+}
+
+/* ✨ Text Utilities */
+.text-light {
+  color: rgba(255, 255, 255, 0.85) !important;
+}
+
+.text-dim {
+  color: rgba(255, 255, 255, 0.7) !important;
+}
+
+.text-error {
+  color: #ff6b6b !important;
+}
+
+
+/* Glass style for select dropdown */
+.v-select {
+  background: rgba(255, 255, 255, 0.08); /* semi-transparent glass */
+  color: #fff; /* text inside select */
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-radius: 8px;
+}
+
+.v-select .v-field__input {
+  color: #fff; /* typed value color */
+}
+
+.v-select .v-field-label {
+  color: rgba(255, 255, 255, 0.65); /* label color */
+}
+
+.v-select .v-list-item {
+  background: rgba(0, 0, 0, 0.3); /* dropdown items background */
+  color: #fff; /* dropdown items text */
+}
+
+.v-select .v-list-item:hover {
+  background: rgba(59, 130, 246, 0.3); /* hover effect */
+  color: #fff;
+}
+
+.v-select .v-field__outline {
+  border-color: rgba(255, 255, 255, 0.25);
+}
+
+.v-select.v-select--focused .v-field__outline {
+  border-color: #3b82f6; /* focus border */
+  box-shadow: 0 0 6px rgba(59, 130, 246, 0.5);
+}

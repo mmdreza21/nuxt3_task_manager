@@ -15,13 +15,13 @@ export default defineNuxtPlugin({
         if (token.value) {
           options.headers = {
             ...options.headers,
-            Accept: "application/json ",
+            //@ts-ignore
             Authorization: `${token.value}` || "mamad",
           };
         } else {
           options.headers = {
             ...options.headers,
-            Accept: "application/json ",
+            //@ts-ignore
             mmd: "sad", // Default header if no token is present
           };
         }

@@ -8,7 +8,8 @@ export default defineNuxtConfig({
   },
   devServer: { host: "0.0.0.0" },
   css: [
-    // "~/assets/style/style.css",
+    "@/assets/styles/glass-theme.css",
+    "~/assets/styles/style.css",
     "persian-datepicker/dist/css/persian-datepicker.min.css",
   ],
   devtools: { enabled: true },

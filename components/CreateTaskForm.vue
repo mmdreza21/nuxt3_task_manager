@@ -17,36 +17,63 @@ const submitTask = () => {
 </script>
 
 <template>
-  <v-card elevation="2" class="mt-4">
-    <v-card-title>Create Task</v-card-title>
+  <v-card
+    color="transparent"
+    class="glass-card pa-6 mt-6"
+    elevation="12"
+    max-width="600"
+  >
+    <v-card-title class="text-h6 font-weight-bold text-light mb-2">
+      Create Task
+    </v-card-title>
+
+    <v-divider class="mb-6" color="rgba(255,255,255,0.1)" />
+
     <v-card-text>
-      <v-form @submit.prevent="submitTask">
+      <v-form @submit.prevent="submitTask" class="d-flex flex-column gap-5">
         <v-text-field
-          density="compact"
           v-model="newTask.title"
           label="Task Title"
-          outlined
+          class="glass-input mb-3"
+          variant="outlined"
+          density="comfortable"
+          prepend-inner-icon="mdi-format-title"
+          hide-details="auto"
           required
         />
+
         <v-textarea
-          density="compact"
           v-model="newTask.desc"
           label="Task Description"
-          outlined
+          class="glass-input"
+          variant="outlined"
+          density="comfortable"
+          auto-grow
+          prepend-inner-icon="mdi-text"
         />
+
         <v-select
-          density="compact"
-          label="priority"
           v-model="newTask.priority"
+          label="Priority"
+          class="glass-input"
+          variant="outlined"
+          density="comfortable"
           :items="[
-            { text: 'low', value: 0 },
-            { text: 'medium', value: 1 },
-            { text: 'high', value: 2 },
+            { text: 'Low', value: 0 },
+            { text: 'Medium', value: 1 },
+            { text: 'High', value: 2 },
           ]"
           item-title="text"
           item-value="value"
-        ></v-select>
-        <v-btn color="primary" type="submit">Create Task</v-btn>
+          prepend-inner-icon="mdi-flag-outline"
+          center-affix
+          hide-details="auto"
+        />
+
+        <v-btn color="transparent" type="submit" class="glass-btn mt-4" block>
+          <v-icon start>mdi-plus</v-icon>
+          Create Task
+        </v-btn>
       </v-form>
     </v-card-text>
   </v-card>
