@@ -4,6 +4,7 @@ import type {
   SuccessLogin,
   UserLoginDTO,
   UserOtpLoginDTO,
+  UserSignDTO,
   UserType,
   userUpdateDto,
 } from "~/types/UserTypes";
@@ -112,7 +113,7 @@ export const useAuthService = () => {
 
     // "The Philosopher’s Stone" - Creating a new account and entering the wizard world
     async signUp(
-      credentials: UserLoginDTO
+      credentials: UserSignDTO
     ): Promise<signUpResponse | null | undefined> {
       try {
         const res = await $customFetch<signUpResponse | null | undefined>(

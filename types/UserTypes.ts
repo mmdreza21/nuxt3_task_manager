@@ -4,6 +4,11 @@ export type UserLoginDTO = {
   email: string;
   password: string;
 };
+export type UserSignDTO = {
+  name: string;
+  email: string;
+  password: string;
+};
 
 export type UserOtpLoginDTO = {
   email: string;

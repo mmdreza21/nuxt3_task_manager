@@ -4,7 +4,7 @@ import { ref } from "vue";
 
 /* current background index */
 const currentBg = ref(3);
-const totalBgs = 14;
+const totalBgs = 10;
 
 /* computed image URL */
 const bgImage = computed(() => `/img/background/img${currentBg.value}.jpg`);
