@@ -57,6 +57,8 @@ const changeStatus = async (id: string, status: any) => {
   }
 };
 const tab = ref(0);
+const createModal = ref(false);
+
 onMounted(loadTasks);
 </script>
 
@@ -101,8 +103,24 @@ onMounted(loadTasks);
             />
           </v-tabs-window-item>
         </v-tabs-window>
-
-        <CreateTaskForm @create-task="createTask" />
+        <v-fab
+          @click="createModal = true"
+          class="ms-4 text-gray900 mb-10 mr-10"
+          base-color="primary"
+          icon="mdi-plus"
+          location="bottom end"
+          size="large"
+        ></v-fab>
+        <v-dialog v-model="createModal">
+          <v-card
+            variant="flat"
+            max-width="100%"
+            class="d-flex elevation-0 align-center justify-center w-100 pa-10"
+            color="transparent"
+          >
+            <CreateTaskForm @create-task="createTask" />
+          </v-card>
+        </v-dialog>
       </v-col>
     </v-row>
   </v-container>

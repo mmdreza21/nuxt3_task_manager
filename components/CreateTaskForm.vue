@@ -21,7 +21,8 @@ const submitTask = () => {
     color="transparent"
     class="glass-card pa-6 mt-6"
     elevation="12"
-    max-width="600"
+    max-width="600px"
+    min-width="400px"
   >
     <v-card-title class="text-h6 font-weight-bold text-light mb-2">
       Create Task
