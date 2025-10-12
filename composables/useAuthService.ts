@@ -176,7 +176,10 @@ export const useAuthService = () => {
           // console.log(authCookie.value);
 
           await new Promise((resolve) => setTimeout(resolve, 1000));
+          console.log("s");
+
           const userData = await useAuthService().getUser();
+          console.log(userData);
 
           if (userData.loggedIn) {
             router.push((route.query.redirect as string) ?? "/");
@@ -221,6 +224,20 @@ export const useAuthService = () => {
         body: { phone },
       });
       return res;
+    }
+
+    async getProfile() {
+      return await $customFetch("/users/profile", { method: "GET" });
+    }
+
+    async changePassword(payload: {
+      oldPassword: string;
+      newPassword: string;
+    }) {
+      return await $customFetch("/users/change-password", {
+        method: "POST",
+        body: payload,
+      });
     }
   }
 

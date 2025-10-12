@@ -16,6 +16,8 @@ const filters = ref({
   doneAt: null,
 });
 
+const user = useAuthUser().getUserState;
+
 async function loadTasks() {
   loading.value = true;
   error.value = "";
@@ -34,6 +36,10 @@ async function loadTasks() {
 
 const createTask = async (newTask: CreateTaskDto) => {
   try {
+    if (!user.loggedIn) {
+      useNotification().fireNotification("red", "pleas login first!");
+      return;
+    }
     const { task, error: createError } = await taskService.createTask(newTask);
     if (createError) throw createError;
     tasks.value.push(task);
@@ -72,15 +78,10 @@ onMounted(loadTasks);
           :loading="loading"
         />
 
-        <v-tabs
-          color="grayDark"
-          class="my-5"
-          v-model="tab"
-          grow
-          density="compact"
-        >
-          <v-tab value="0">To-Do</v-tab>
-          <v-tab value="1">Done</v-tab>
+        <v-tabs v-model="tab" class="my-5" density="comfortable" hide-slider>
+          <v-tab v-for="(t, i) in ['To-Do', 'Done']" :key="i" :value="i">
+            {{ t }}
+          </v-tab>
         </v-tabs>
         <v-tabs-window v-model="tab">
           <v-tabs-window-item>
@@ -111,16 +112,9 @@ onMounted(loadTasks);
           location="bottom end"
           size="large"
         ></v-fab>
-        <v-dialog v-model="createModal">
-          <v-card
-            variant="flat"
-            max-width="100%"
-            class="d-flex elevation-0 align-center justify-center w-100 pa-10"
-            color="transparent"
-          >
-            <CreateTaskForm @create-task="createTask" />
-          </v-card>
-        </v-dialog>
+        <CommonBaseDialog title="Create Task " v-model="createModal">
+          <CreateTaskForm @create-task="createTask" />
+        </CommonBaseDialog>
       </v-col>
     </v-row>
   </v-container>

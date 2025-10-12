@@ -1,5 +1,8 @@
 <script setup lang="ts">
-await useAuthService().getUser();
+const auth = useAuthUser();
+const userState = auth.getUserState;
+
+if (!userState.loggedIn) await useAuthService().getUser();
 // await useAsyncData('user', () => store.fetchUser().then(() => true))
 const err = useError();
 const handleError = () => {

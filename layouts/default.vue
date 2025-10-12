@@ -29,7 +29,7 @@ onMounted(() => {
       }"
     >
       <LayoutHeader @change-bg="nextBackground" />
-      <SharedSnakeBarNotife />
+      <CommonSnakeBarNotife />
       <slot />
     </div>
   </v-app>

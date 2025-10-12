@@ -23,6 +23,7 @@ const emit = defineEmits(["apply-filters"]);
         <v-row>
           <v-col cols="12" md="4">
             <v-select
+              :menu-props="{ theme: 'dark' }"
               v-model="filters!.priority"
               label="Priority"
               class="glass-input"

@@ -75,6 +75,7 @@ const changeStatus = async (taskId: string, newStatus: any) => {
             variant="outlined"
             density="comfortable"
             hide-details="auto"
+            :menu-props="{ theme: 'dark' }"
             @change="changeStatus(task.id, task.status)"
           />
         </v-list-item-action>

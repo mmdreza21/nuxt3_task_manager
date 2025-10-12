@@ -1,6 +1,10 @@
 <script setup lang="ts">
 const auth = useAuthUser();
-const userState = auth.getUserState;
+
+const userState = computed(() => auth.getUserState);
+
+// Option 2 — Destructure with reactivity (using storeToRefs)
+// const { getUserState } = storeToRefs(useAuthUser());
 </script>
 
 <template>

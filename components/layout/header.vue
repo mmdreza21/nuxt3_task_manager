@@ -20,7 +20,7 @@ function changeBackground() {
         <v-sheet
           flat
           color="transparent"
-          class="header-content d-flex align-center justify-space-between w-100 pa-3 px-5 rounded-xl"
+          class="glass-card d-flex align-center justify-space-between w-100 pa-3 px-5 rounded-xl"
         >
           <div class="d-flex align-center">
             <!-- Menu icon (mobile) -->
