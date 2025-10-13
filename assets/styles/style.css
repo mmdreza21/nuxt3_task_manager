@@ -528,3 +528,6 @@ caption {
 .rounded-15{
   border-radius: 15px !important;
 }
+.h-90vh{
+  height: 90vh !important;
+}

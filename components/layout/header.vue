@@ -7,14 +7,14 @@ function changeBackground() {
 </script>
 
 <template>
-  <div class="d-flex align-center justify-center w-100">
-    <SharedHeaderSideBar v-model="drawer" />
+  <div class="d-flex align-center justify-center w-100 rounded-xl">
+    <!-- <SharedHeaderSideBar v-model="drawer" /> -->
 
     <v-app-bar
-      height="80"
+      height="100"
       color="transparent"
       flat
-      class="d-flex align-center justify-center"
+      class="d-flex align-center justify-center mt-1 rounded-xl"
     >
       <v-container class="d-flex align-center justify-center">
         <v-sheet
@@ -41,8 +41,9 @@ function changeBackground() {
             </v-btn>
           </div>
 
+          <LayoutLinks></LayoutLinks>
           <!-- Auth Section -->
-          <LayoutAuthSection @drawer="drawer = true" />
+          <LayoutAuthSection />
         </v-sheet>
       </v-container>
     </v-app-bar>
@@ -69,7 +70,6 @@ function changeBackground() {
   background: rgba(255, 255, 255, 0.12);
   border: 1px solid rgba(255, 255, 255, 0.25);
   color: #fff !important;
-  border-radius: 10px;
   transition: all 0.3s ease;
   padding: 8px;
 }

@@ -41,6 +41,7 @@
     "persian-datepicker": "^1.2.0",
     "pinia": "^2.2.2",
     "qs": "^6.12.3",
+    "socket.io-client": "^4.8.1",
     "universal-cookie": "^7.2.0"
   }
 }

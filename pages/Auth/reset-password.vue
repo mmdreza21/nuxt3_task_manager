@@ -1,31 +1,35 @@
 <script setup lang="ts">
 import { ref } from "vue";
+import { useRoute } from "vue-router";
+import { useUserService } from "~/composables/useUserService";
+import { useNotification } from "~/composables/useNotification";
+
 definePageMeta({ middleware: "guest" });
 
-const email = ref("");
-const password = ref("");
+const route = useRoute();
+const email = ref((route.query.email as string) || "");
+const otp = ref("");
+const newPassword = ref("");
 const loading = ref(false);
-const errorMessage = ref("");
-
 const { fireNotification } = useNotification();
 
 const rules = {
   required: (v: string) => !!v || "This field is required",
-  email: (v: string) => /.+@.+\..+/.test(v) || "Invalid email format",
+  otp: (v: string) => /^\d{4,6}$/.test(v) || "Invalid OTP code",
 };
 
-const login = async () => {
+const resetPassword = async () => {
   loading.value = true;
-  errorMessage.value = "";
-
   try {
-    // Simulate API call (replace with actual call)
-    const res = await useAuthService()
-      .loginProcess(useAuthService().loginWithPass)
-      .login({ email: email.value, password: password.value });
+    await useUserService().resetPassword({
+      otp: otp.value,
+      newPassword: newPassword.value,
+    });
+
+    fireNotification("success", "Password reset successfully!");
+    navigateTo("/auth/login");
   } catch (error: any) {
-    errorMessage.value = error?.message || "Login failed.";
-    // fireNotification("error", errorMessage.value);
+    fireNotification("error", error?.message || "Failed to reset password");
   } finally {
     loading.value = false;
   }
@@ -47,20 +51,22 @@ const login = async () => {
       width="100%"
     >
       <div class="mb-8">
-        <h1 class="text-h4 font-weight-bold mb-2 text-light">Task Manager</h1>
+        <h1 class="text-h4 font-weight-bold mb-2 text-light">Reset Password</h1>
         <p class="text-body-2 text-dim">
-          Manage your work smartly — sign in to continue
+          Enter the OTP sent to your email:
+          <br />
+          <span class="text-cyan-400">{{ email }}</span>
         </p>
       </div>
 
-      <v-form @submit.prevent="login" class="d-flex flex-column gap-5">
-        <v-text-field
-          v-model="email"
-          label="Email"
-          type="email"
-          :rules="[rules.required, rules.email]"
+      <v-form @submit.prevent="resetPassword" class="d-flex flex-column gap-5">
+        <!-- ✅ OTP Input Field -->
+        <v-otp-input
+          v-model="otp"
+          length="6"
+          type="text"
           variant="outlined"
-          prepend-inner-icon="mdi-email-outline"
+          :rules="[rules.required, rules.otp]"
           density="comfortable"
           class="glass-input"
           hide-details="auto"
@@ -68,26 +74,17 @@ const login = async () => {
         />
 
         <v-text-field
-          v-model="password"
-          label="Password"
+          v-model="newPassword"
+          label="New Password"
           type="password"
           :rules="[rules.required]"
           variant="outlined"
           prepend-inner-icon="mdi-lock-outline"
           density="comfortable"
-          class="glass-input my-5"
+          class="glass-input"
           hide-details="auto"
           required
         />
-
-        <div class="d-flex justify-end">
-          <NuxtLink
-            to="/auth/forgot-password"
-            class="text-light font-weight-medium"
-          >
-            Forgot password?
-          </NuxtLink>
-        </div>
 
         <v-btn
           type="submit"
@@ -96,16 +93,16 @@ const login = async () => {
           class="glass-btn mt-2"
           block
         >
-          Login
+          Reset Password
         </v-btn>
       </v-form>
 
       <v-divider class="my-6"></v-divider>
 
       <p class="text-light">
-        Don’t have an account?
-        <NuxtLink to="/auth/register" class="text-light font-weight-medium">
-          Create one
+        Back to
+        <NuxtLink to="/auth/login" class="text-light font-weight-medium">
+          Login
         </NuxtLink>
       </p>
     </v-card>

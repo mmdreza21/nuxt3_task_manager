@@ -83,8 +83,8 @@ export const useAuthService = () => {
             body: credentials,
           }
         );
-      } catch (error) {
-        fireNotification("red", "ایمیل یا رمز عبور اشتباه است");
+      } catch (error: any) {
+        fireNotification("red", error.message);
       }
     }
 

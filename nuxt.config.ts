@@ -74,4 +74,9 @@ export default defineNuxtConfig({
   sitemap: {
     sources: ["/api/__sitemap__/urls"],
   },
+  nitro: {
+    routeRules: {
+      "/socket.io/**": { proxy: "http://localhost:8080/socket.io/**" },
+    },
+  },
 });
