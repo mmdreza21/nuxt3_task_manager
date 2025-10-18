@@ -29,8 +29,10 @@ onMounted(() => {
       }"
     >
       <LayoutHeader @change-bg="nextBackground" />
-      <CommonSnakeBarNotife />
-      <slot />
+      <main class="pt-10">
+        <CommonSnakeBarNotife />
+        <slot />
+      </main>
     </div>
   </v-app>
 </template>

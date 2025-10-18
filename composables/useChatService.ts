@@ -1,20 +1,25 @@
 import { io, Socket } from "socket.io-client";
 import { ref, onUnmounted } from "vue";
 import { useNotification } from "./useNotification";
+import type { UserType } from "~/types/UserTypes";
 
 interface ChatMessage {
-  from: string;
+  from: Partial<UserType>;
   message: string;
 }
 
 export const useChatService = (token: string) => {
+  const user = useAuthUser().getUserState.user;
   const socket = ref<Socket | null>(null);
   const messages = ref<ChatMessage[]>([]);
   const isConnected = ref(false);
+  const userCount = ref<number>(0);
   const { fireNotification } = useNotification();
 
-  // ✅ Connect to WebSocket server
   const connect = () => {
+    // ✅ Prevent duplicate connections
+    if (socket.value && socket.value.connected) return;
+
     if (!token) {
       console.warn("⚠️ No token provided for chat connection");
       return;
@@ -22,7 +27,7 @@ export const useChatService = (token: string) => {
 
     socket.value = io("http://localhost:8080", {
       query: { token: token.replace(/^bearer\s+/i, "") },
-      transports: ["websocket", "polling"],
+      transports: ["websocket"],
       reconnection: true,
       reconnectionAttempts: 5,
     });
@@ -30,53 +35,51 @@ export const useChatService = (token: string) => {
     socket.value.on("connect", () => {
       isConnected.value = true;
       console.log("✅ Connected to chat server");
-      fireNotification("success", "Connected to chat server");
     });
 
     socket.value.on("disconnect", () => {
       isConnected.value = false;
       console.warn("❌ Disconnected from chat server");
-      fireNotification("error", "Disconnected from chat");
     });
 
     socket.value.on("connect_error", (err) => {
       console.error("🚨 Chat connection error:", err.message);
-      fireNotification("error", "Chat connection failed");
     });
 
-    // 📩 Handle incoming messages
+    socket.value.on("userCount", (count: number) => {
+      userCount.value = count;
+    });
+
+    // 📩 Receive messages
     socket.value.on("message", (data: ChatMessage) => {
-      messages.value.push(data);
-      fireNotification("info", `New message from ${data.from}`);
+      if (data.from.id !== user?.id) messages.value.push(data);
     });
   };
 
-  // ✉️ Send message to another user
-  const sendMessage = (to: string, message: string) => {
+  const sendMessage = (message: string) => {
     if (!socket.value || !isConnected.value) {
       fireNotification("error", "Not connected to chat");
       return;
     }
 
-    socket.value.emit("message", { to, message });
-    messages.value.push({ from: "me", message });
+    socket.value.emit("message", { message, from: socket.value.id });
+    messages.value.push({ from: { name: "me" }, message });
   };
 
-  // 🧹 Clean up when component unmounts
   onUnmounted(() => {
-    if (socket.value) {
-      socket.value.disconnect();
-      socket.value = null;
-    }
+    socket.value?.disconnect();
+    socket.value = null;
   });
 
-  // 🔌 Initialize connection immediately
-  connect();
+  // ❌ Don't auto-connect here; let component call connect() manually
+  // connect();
 
   return {
     socket,
     isConnected,
     messages,
     sendMessage,
+    userCount,
+    connect, // ✅ expose so component can control when to connect
   };
 };

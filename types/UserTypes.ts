@@ -44,11 +44,7 @@ export type signUpResponse = {
 };
 
 export type UserType = ApiCallCommon & {
-  birthday: string;
   email: string;
-  gender: string;
-  google_id: string;
-  phone: string;
   roles: string;
   name: string;
 };
@@ -58,7 +54,4 @@ export type AuthStoreType = {
   loggedIn: boolean;
 };
 
-export type userUpdateDto = Pick<
-  UserType,
-  "birthday" | "email" | "gender" | "phone" | "roles" | "name"
->;
+export type userUpdateDto = Pick<UserType, "email" | "roles" | "name">;

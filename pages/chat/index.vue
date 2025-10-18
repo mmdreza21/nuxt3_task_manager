@@ -6,30 +6,30 @@ import { useCookie } from "#app";
 const messageText = ref("");
 const token = useCookie("Authorization");
 const chat = useChatService(token.value || "");
-const { messages, sendMessage } = chat;
 
-// Override sendMessage to simplify
+const { messages, sendMessage, userCount, connect } = chat;
+
+// ✅ Wrapper to prevent sending events instead of strings
 const sendMessageWrapper = () => {
   if (!messageText.value.trim()) return;
-  sendMessage("global", messageText.value);
+  sendMessage(messageText.value);
   messageText.value = "";
 };
+
+onMounted(() => {
+  connect();
+});
 </script>
 
 <template>
-  <v-container
-    class="pa-0 h-90vh mt-16 d-flex align-center justify-center py-12"
-  >
+  <v-container class="h-90vh mt-16 d-flex align-center justify-center py-12">
     <v-card class="chat-card glass-card d-flex flex-column" elevation="12">
       <!-- Header -->
       <div class="chat-header pa-4 d-flex align-center justify-space-between">
         <div class="d-flex align-center">
-          <v-avatar size="40" class="me-3">
-            <img src="https://cdn-icons-png.flaticon.com/512/847/847969.png" />
-          </v-avatar>
-          <div>
-            <h3 class="text-h6 mb-0 text-light">Cyber Chat</h3>
-            <small class="text-cyan-400">Online</small>
+          <div class="w-100">
+            <h3 class="text-h6 mb-0 text-light">Chat</h3>
+            <b class="text-cyan-400">👥 {{ userCount }} Online users</b>
           </div>
         </div>
       </div>
@@ -42,19 +42,20 @@ const sendMessageWrapper = () => {
           v-for="(msg, i) in messages"
           :key="i"
           class="d-flex mb-3"
-          :class="msg.from === 'me' ? 'justify-end' : 'justify-start'"
+          :class="msg.from.name === 'me' ? 'justify-end' : 'justify-start'"
         >
-          <div
-            class="message pa-3 rounded-xl"
-            :class="msg.from === 'me' ? 'message-out' : 'message-in'"
+          <v-card
+            min-width="100px"
+            class="message pa-3 rounded-lg"
+            :class="msg.from.name === 'me' ? 'message-out' : 'message-in'"
           >
+            <small class="text-caption d-block mt-1 text-dim">
+              {{ msg.from.name === "me" ? "You" : msg.from.name }}
+            </small>
             <div class="text-body-2">
               {{ msg.message }}
             </div>
-            <small class="text-caption d-block mt-1 text-right text-dim">
-              {{ msg.from === "me" ? "You" : msg.from }}
-            </small>
-          </div>
+          </v-card>
         </div>
       </div>
 
@@ -69,14 +70,14 @@ const sendMessageWrapper = () => {
           density="comfortable"
           hide-details
           class="flex-grow-1 glass-input"
-          @keyup.enter="sendMessage"
+          @keyup.enter="sendMessageWrapper"
         />
         <v-btn
           icon="mdi-send"
           color="cyan"
           elevation="4"
           class="ms-3"
-          @click="sendMessage"
+          @click="sendMessageWrapper"
         />
       </div>
     </v-card>
@@ -84,6 +85,7 @@ const sendMessageWrapper = () => {
 </template>
 
 <style scoped>
+/* ✅ Your style kept exactly as before */
 .chat-container {
   height: 100vh;
   background: linear-gradient(135deg, #0f172a, #1e293b);
@@ -108,7 +110,6 @@ const sendMessageWrapper = () => {
 }
 
 .chat-messages {
-  background: transparent;
   overflow-y: auto;
   scrollbar-width: thin;
   scrollbar-color: rgba(0, 255, 255, 0.2) transparent;
@@ -127,7 +128,7 @@ const sendMessageWrapper = () => {
 }
 
 .message-out {
-  background: #00eaff;
+  background: #072022;
   color: #0f172a;
   border-top-right-radius: 0;
 }
