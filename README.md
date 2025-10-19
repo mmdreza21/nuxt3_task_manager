@@ -1,75 +1,105 @@
-# Nuxt 3 Minimal Starter
+# 🎨 Frontend — Nuxt 3 + Vuetify 3 + Socket.io
 
-Look at the [Nuxt 3 documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
+A modern and dynamic **frontend application** built with **Nuxt 3** and **Vuetify 3**, designed to interact seamlessly with the NestJS backend.  
+This app provides a smooth experience for **authentication**, **public notes**, and a **real-time chat system**, all built with a modular and composable architecture.
 
-## Setup
+---
 
-Make sure to install the dependencies:
+## 🚀 Tech Stack
 
-```bash
-# npm
-npm install
+- **Nuxt 3** — Vue-powered meta framework for modern web apps  
+- **Vuetify 3** — Material Design UI components  
+- **Pinia** — State management for user/session handling  
+- **Socket.io Client** — Real-time chat communication  
+- **TypeScript** — Strongly typed and scalable  
+- **Custom Fetch Wrapper (`$customFetch`)** — Secure and centralized API handling  
 
-# pnpm
-pnpm install
+---
 
-# yarn
-yarn install
+## ⚙️ Features
 
-# bun
-bun install
-```
+### 🔐 Authentication System
 
-## Development Server
+- JWT-based login integrated with the NestJS backend  
+- Uses composable `useAuthUser()` for managing user state  
+- Includes `login`, `logout`, and automatic token persistence  
+- All API calls use `$customFetch()` for secure, centralized requests  
+- Backend endpoint: [`/auth`](https://github.com/mmdreza21/Nestjs_prisma_task_manager/tree/main/src/auth)
 
-Start the development server on `http://localhost:3000`:
+### 💬 Real-Time Chat
 
-```bash
-# npm
-npm run dev
+- Built using **Socket.io Client**  
+- Secure WebSocket connection with user token  
+- Real-time message broadcasting  
+- Tracks online user count (`userCount`)  
+- Automatically reconnects on network loss  
+- Displays incoming messages dynamically while preventing self-echo  
+- Backend WebSocket gateway: [`/chat`](https://github.com/mmdreza21/Nestjs_prisma_task_manager/tree/main/src/chat)
 
-# pnpm
-pnpm run dev
+### 🗒️ Public Notes
 
-# yarn
-yarn dev
+- Create, view, update, and delete public notes (no login required)  
+- Integrated with backend endpoints  
+- Reactive note list updates after CRUD actions  
+- Elegant Vuetify cards and dialogs for notes display  
+- Backend endpoint: [`/notes`](https://github.com/mmdreza21/Nestjs_prisma_task_manager/tree/main/src/notes)
 
-# bun
-bun run dev
-```
+### 🧑‍💻 User Dashboard
 
-## Production
+- Authenticated area for users to view and manage their tasks or profile  
+- Responsive layout built with Vuetify grid system  
+- Conditional rendering for login/register vs. logged-in state  
+- Backend endpoints: [`/users`](https://github.com/mmdreza21/Nestjs_prisma_task_manager/tree/main/src/users), [`/tasks`](https://github.com/mmdreza21/Nestjs_prisma_task_manager/tree/main/src/tasks)
 
-Build the application for production:
+---
 
-```bash
-# npm
-npm run build
+## 🧠 Authentication Logic (useAuthUser.ts)
 
-# pnpm
-pnpm run build
+- Stores and retrieves JWT from `localStorage`  
+- Keeps user data in a reactive Pinia store  
+- Handles automatic logout on token expiration  
+- Exposes composables for login, logout, and checking auth state  
 
-# yarn
-yarn build
+---
 
-# bun
-bun run build
-```
+## 🪄 Styling and Design
 
-Locally preview production build:
+- Built entirely with **Vuetify 3**  
+- Responsive layout supporting both dark/light mode  
+- Simple, clean interface (no glassmorphism)  
+- Modern components for forms, dialogs, and lists  
 
-```bash
-# npm
-npm run preview
+---
 
-# pnpm
-pnpm run preview
+## 🧪 Testing (Optional)
 
-# yarn
-yarn preview
+- Uses **Vitest** or **Playwright** (depending on setup) for UI and E2E testing  
+- Mock backend environment for isolated frontend testing  
 
-# bun
-bun run preview
-```
+---
 
-Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
+## 🧩 Backend Integration
+
+This frontend connects to the **NestJS + Prisma backend**, which provides:
+
+- [`/auth`](https://github.com/mmdreza21/Nestjs_prisma_task_manager/tree/main/src/auth) for authentication  
+- [`/notes`](https://github.com/mmdreza21/Nestjs_prisma_task_manager/tree/main/src/notes) for public CRUD  
+- [`/chat`](https://github.com/mmdreza21/Nestjs_prisma_task_manager/tree/main/src/chat) for WebSocket connections  
+- [`/tasks`](https://github.com/mmdreza21/Nestjs_prisma_task_manager/tree/main/src/tasks) and [`/users`](https://github.com/mmdreza21/Nestjs_prisma_task_manager/tree/main/src/users) for protected actions  
+
+⚙️ **Backend Repo:** [NestJS + Prisma Task Manager](https://github.com/mmdreza21/Nestjs_prisma_task_manager)
+
+---
+
+## 🌍 Demo
+
+🖥️ **Live Frontend:** [https://mmdreza21.github.io](https://mmdreza21.github.io)  
+
+---
+
+## ❤️ Author
+
+**Mohammad Reza**
+
+> “Coding isn’t just a career — it’s how I translate creativity into logic.”  
+> GitHub: [@mmdreza21](https://github.com/mmdreza21)
