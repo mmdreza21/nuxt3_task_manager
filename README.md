@@ -69,12 +69,6 @@ This app provides a smooth experience for **authentication**, **public notes**, 
 - Simple, clean interface (no glassmorphism)  
 - Modern components for forms, dialogs, and lists  
 
----
-
-## 🧪 Testing (Optional)
-
-- Uses **Vitest** or **Playwright** (depending on setup) for UI and E2E testing  
-- Mock backend environment for isolated frontend testing  
 
 ---
 
@@ -91,11 +85,6 @@ This frontend connects to the **NestJS + Prisma backend**, which provides:
 
 ---
 
-## 🌍 Demo
-
-🖥️ **Live Frontend:** [https://mmdreza21.github.io](https://mmdreza21.github.io)  
-
----
 
 ## ❤️ Author
 
