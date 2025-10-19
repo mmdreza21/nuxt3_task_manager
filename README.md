@@ -24,7 +24,7 @@ This app provides a smooth experience for **authentication**, **public notes**, 
 - Uses composable `useAuthUser()` for managing user state  
 - Includes `login`, `logout`, and automatic token persistence  
 - All API calls use `$customFetch()` for secure, centralized requests  
-- Backend endpoint: [`/auth`](https://github.com/mmdreza21/Nestjs_prisma_task_manager/tree/main/src/auth)
+
 
 ### 💬 Real-Time Chat
 
@@ -34,7 +34,7 @@ This app provides a smooth experience for **authentication**, **public notes**, 
 - Tracks online user count (`userCount`)  
 - Automatically reconnects on network loss  
 - Displays incoming messages dynamically while preventing self-echo  
-- Backend WebSocket gateway: [`/chat`](https://github.com/mmdreza21/Nestjs_prisma_task_manager/tree/main/src/chat)
+
 
 ### 🗒️ Public Notes
 
@@ -42,14 +42,13 @@ This app provides a smooth experience for **authentication**, **public notes**, 
 - Integrated with backend endpoints  
 - Reactive note list updates after CRUD actions  
 - Elegant Vuetify cards and dialogs for notes display  
-- Backend endpoint: [`/notes`](https://github.com/mmdreza21/Nestjs_prisma_task_manager/tree/main/src/notes)
+
 
 ### 🧑‍💻 User Dashboard
 
 - Authenticated area for users to view and manage their tasks or profile  
 - Responsive layout built with Vuetify grid system  
 - Conditional rendering for login/register vs. logged-in state  
-- Backend endpoints: [`/users`](https://github.com/mmdreza21/Nestjs_prisma_task_manager/tree/main/src/users), [`/tasks`](https://github.com/mmdreza21/Nestjs_prisma_task_manager/tree/main/src/tasks)
 
 ---
 
