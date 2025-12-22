@@ -33,6 +33,7 @@ function changeBackground() {
             />
             <v-btn
               icon
+              size="44"
               class="glass-icon-btn"
               @click="changeBackground"
               title="Change Background"

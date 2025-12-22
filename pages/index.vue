@@ -37,7 +37,7 @@ async function loadTasks() {
 const createTask = async (newTask: CreateTaskDto) => {
   try {
     if (!user.loggedIn) {
-      useNotification().fireNotification("red", "pleas login first!");
+      useNotification().fireNotification("red", "please login first!");
       return;
     }
     const { task, error: createError } = await taskService.createTask(newTask);
@@ -72,6 +72,15 @@ onMounted(loadTasks);
   <v-container class="py-4 mt-16 pt-16">
     <v-row>
       <v-col cols="12" md="8" offset-md="2">
+        <v-fab
+          @click="createModal = true"
+          class="ms-4 text-gray900 mb-10 mr-10"
+          base-color="primary"
+          location="bottom end"
+          size="large"
+        >
+          create new task</v-fab
+        >
         <TaskFilters
           :filters="filters"
           @apply-filters="loadTasks"
@@ -104,14 +113,7 @@ onMounted(loadTasks);
             />
           </v-tabs-window-item>
         </v-tabs-window>
-        <v-fab
-          @click="createModal = true"
-          class="ms-4 text-gray900 mb-10 mr-10"
-          base-color="primary"
-          icon="mdi-plus"
-          location="bottom end"
-          size="large"
-        ></v-fab>
+
         <CommonBaseDialog title="Create Task " v-model="createModal">
           <CreateTaskForm @create-task="createTask" />
         </CommonBaseDialog>

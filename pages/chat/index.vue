@@ -22,8 +22,13 @@ onMounted(() => {
 </script>
 
 <template>
-  <v-container class="h-90vh mt-16 d-flex align-center justify-center py-12">
-    <v-card class="chat-card glass-card d-flex flex-column" elevation="12">
+  <v-container
+    class="h-90vh mt-16 d-flex align-center justify-center py-16 my-16"
+  >
+    <v-card
+      class="chat-card glass-card d-flex flex-column my-12"
+      elevation="12"
+    >
       <!-- Header -->
       <div class="chat-header pa-4 d-flex align-center justify-space-between">
         <div class="d-flex align-center">
@@ -97,7 +102,7 @@ onMounted(() => {
 .chat-card {
   width: 420px;
   max-width: 95%;
-  height: 85vh;
+  height: 70vh;
   display: flex;
   flex-direction: column;
   backdrop-filter: blur(16px);

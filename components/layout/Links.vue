@@ -67,6 +67,21 @@ const { menuItems }: any = useUtilities();
 </template>
 
 <style scoped>
+/* Hide scrollbars globally within this component */
+.glass-nav-btn,
+.glass-dropdown,
+.v-list,
+.v-list-item {
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
+}
+
+.glass-nav-btn::-webkit-scrollbar,
+.glass-dropdown::-webkit-scrollbar,
+.v-list::-webkit-scrollbar,
+.v-list-item::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera */
+}
 .glass-nav {
   background: radial-gradient(circle at top left, #0f2027, #203a43, #2c5364);
   border: 1px solid rgba(255, 255, 255, 0.08);
@@ -83,12 +98,6 @@ const { menuItems }: any = useUtilities();
   text-transform: none !important;
   transition: all 0.3s ease;
   padding: 6px 12px;
-}
-
-.glass-nav-btn:hover {
-  color: #00ffff !important;
-  text-shadow: 0 0 8px rgba(0, 255, 255, 0.6);
-  transform: translateY(-1px);
 }
 
 .active-dot {
@@ -112,11 +121,5 @@ const { menuItems }: any = useUtilities();
   font-weight: 500;
   border-radius: 8px;
   transition: all 0.25s ease;
-}
-
-.glass-menu-item:hover {
-  background: rgba(0, 255, 255, 0.08);
-  color: #00ffff !important;
-  text-shadow: 0 0 6px rgba(0, 255, 255, 0.4);
 }
 </style>

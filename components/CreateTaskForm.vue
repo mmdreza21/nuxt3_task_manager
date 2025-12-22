@@ -8,6 +8,8 @@ const newTask = ref<CreateTaskDto>({
   status: "Todo",
 });
 
+const { loggedIn } = useAuthUser().getUserState;
+
 const emit = defineEmits(["create-task"]);
 
 const submitTask = () => {
@@ -18,8 +20,10 @@ const submitTask = () => {
 
 <template>
   <v-divider class="mb-6" color="rgba(255,255,255,0.1)" />
-
-  <v-card-text>
+  <div v-if="!loggedIn" type="info" class="mb-6" colored-border>
+    <p class="text-h6 font-weight-bold text-light">please login first!</p>
+  </div>
+  <v-card-text v-else>
     <v-form @submit.prevent="submitTask" class="d-flex flex-column gap-5">
       <v-text-field
         v-model="newTask.title"

@@ -28,9 +28,9 @@ watch(
       v-model="snake"
       :timeout="3000"
     >
-      <div class="d-flex align-center justify-center w-100 h-100">
+      <b class="d-flex align-center justify-center w-100 h-100 text-black">
         {{ snakeBarTexts }}
-      </div>
+      </b>
     </v-snackbar>
   </div>
 </template>

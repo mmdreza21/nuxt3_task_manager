@@ -17,7 +17,13 @@ const userState = computed(() => auth.getUserState);
         class="glass-btn"
         to="/auth/login"
       />
-      <v-btn to="/auth/login" v-else variant="plain" class="glass-icon-btn">
+      <v-btn
+        size="44"
+        to="/auth/login"
+        v-else
+        variant="plain"
+        class="glass-icon-btn"
+      >
         <v-icon>mdi-account-outline</v-icon>
       </v-btn>
     </div>
