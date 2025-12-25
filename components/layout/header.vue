@@ -1,14 +1,15 @@
 <script setup lang="ts">
-const drawer = ref<boolean>(false);
 const emit = defineEmits(["change-bg"]);
 function changeBackground() {
   emit("change-bg");
 }
-</script>
 
+const drawer = ref(false);
+</script>
 <template>
   <div class="d-flex align-center justify-center w-100 rounded-xl">
-    <!-- <SharedHeaderSideBar v-model="drawer" /> -->
+    <!-- MOBILE SIDEBAR -->
+    <LayoutHeaderSideBar v-model="drawer" />
 
     <v-app-bar
       height="100"
@@ -23,27 +24,27 @@ function changeBackground() {
           class="glass-card d-flex align-center justify-space-between w-100 pa-3 px-5 rounded-xl"
         >
           <div class="d-flex align-center">
-            <!-- Menu icon (mobile) -->
+            <!-- Mobile menu icon -->
             <v-icon
-              v-if="!$vuetify.display.lgAndUp"
-              type="outline"
-              icon="menu-1"
+              v-if="!$vuetify.display.smAndUp"
+              icon="mdi-menu"
               class="mr-2"
               @click="drawer = true"
             />
+
             <v-btn
               icon
               size="44"
-              class="glass-icon-btn"
+              class="glass-icon-btn hidden-md-and-down"
               @click="changeBackground"
-              title="Change Background"
             >
               <v-icon>mdi-image-auto-adjust</v-icon>
             </v-btn>
           </div>
 
-          <LayoutLinks></LayoutLinks>
-          <!-- Auth Section -->
+          <!-- Desktop links -->
+          <LayoutLinks v-if="$vuetify.display.lgAndUp" />
+
           <LayoutAuthSection />
         </v-sheet>
       </v-container>

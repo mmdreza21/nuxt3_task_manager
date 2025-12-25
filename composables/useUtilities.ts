@@ -16,6 +16,7 @@ export const useUtilities = () => {
   const menuItems: Ref<menuItems[]> = ref([
     { title: "Task Manager", to: "/" },
     { title: "Chat", to: "/chat" },
+    { title: "AI Chat", to: "/ai" },
   ]);
 
   return {
