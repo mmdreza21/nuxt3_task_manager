@@ -17,6 +17,7 @@ export const useUtilities = () => {
     { title: "Task Manager", to: "/" },
     { title: "Chat", to: "/chat" },
     { title: "AI Chat", to: "/ai" },
+    { title: "My Unity Games", to: "/games" },
   ]);
 
   return {

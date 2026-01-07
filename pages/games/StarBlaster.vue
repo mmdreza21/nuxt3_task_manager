@@ -1,43 +1,16 @@
-<template>
-  <div class="d-flex justify-center my-16 pt-5 align-center">
-    <canvas
-      ref="unityCanvas"
-      id="unity-canvas"
-      width="540"
-      height="10vh"
-      tabindex="-1"
-      style="width: 450px; height: 80vh; background: #231f20"
-    ></canvas>
-  </div>
-</template>
-
 <script setup lang="ts">
-import { onMounted, ref } from "vue";
+import { onMounted, onUnmounted, ref } from "vue";
 
 const unityCanvas = ref<HTMLCanvasElement | null>(null);
+const onPage = ref<boolean>(true);
+
+let unityInstance: any = null;
 
 onMounted(() => {
-  if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
-    const meta = document.createElement("meta");
-    meta.name = "viewport";
-    meta.content =
-      "width=device-width, height=device-height, initial-scale=1.0, user-scalable=no, shrink-to-fit=yes";
-    document.getElementsByTagName("head")[0].appendChild(meta);
+  const loader = document.createElement("script");
+  loader.src = "/Build1/Web.loader.js";
 
-    const canvas = unityCanvas.value;
-    if (canvas) {
-      canvas.style.width = "100%";
-      canvas.style.height = "100%";
-      canvas.style.position = "fixed";
-    }
-
-    document.body.style.textAlign = "left";
-  }
-
-  const script = document.createElement("script");
-  script.src = "/Build1/Web.loader.js";
-
-  script.onload = () => {
+  loader.onload = () => {
     // @ts-ignore
     createUnityInstance(unityCanvas.value, {
       arguments: [],
@@ -48,11 +21,47 @@ onMounted(() => {
       companyName: "DefaultCompany",
       productName: "Star Blaster",
       productVersion: "1.0",
-    }).catch((err: any) => {
-      alert(err);
-    });
+    })
+      .then((instance: any) => {
+        unityInstance = instance;
+      })
+      .catch((err: any) => {
+        alert(err);
+      });
   };
 
-  document.body.appendChild(script);
+  document.body.appendChild(loader);
+});
+
+onUnmounted(async () => {
+  onPage.value = false;
+
+  if (unityInstance) {
+    try {
+      await unityInstance.Quit();
+      unityInstance = null;
+    } catch (e) {
+      console.warn("Unity cleanup error:", e);
+    }
+  }
+
+  const canvas = unityCanvas.value;
+  if (canvas) {
+    canvas.remove();
+  }
 });
 </script>
+
+<template>
+  <div class="d-flex justify-center my-16 pt-5 align-center">
+    <canvas
+      v-if="onPage"
+      ref="unityCanvas"
+      id="unity-canvas"
+      width="540"
+      height="10vh"
+      tabindex="-1"
+      style="width: 450px; height: 80vh; background: #231f20"
+    ></canvas>
+  </div>
+</template>
